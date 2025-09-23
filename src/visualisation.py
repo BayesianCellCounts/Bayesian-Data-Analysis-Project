@@ -8,7 +8,7 @@ by Mathis DA SILVA
 import matplotlib.pyplot as plt
 import seaborn as sns
 import arviz as az
-import pandans as pd
+import pandas as pd
 
 
 class Visualisation:
@@ -17,13 +17,13 @@ class Visualisation:
     def __init__(self):
         self.figure_size = (12, 8)
 
-    def plot_model_comparison(self, traces_dict, comparison)
+    def plot_model_comparison(self, traces_dict, comparison):
         """
         :param traces_dict: 
         :param comparison: 
         :return: 
         """
-        plt.figure(self.figure_size)
+        plt.figure(figsize=self.figure_size)
         az.plot_comparision(comparison)
         plt.title("Comparison between models")
         plt.show()
@@ -62,7 +62,7 @@ class Visualisation:
                 })
         results = pd.DataFrame(results)
 
-        plt.figure(self.figure_size)
+        plt.figure(figsize=self.figure_size)
         sns.barplot(data = results, x='Region', y = 'Theta', hue = 'Group')
         plt.xticks(rotation = 45)
         plt.title(f"Effects on region and group of {model_name}")
