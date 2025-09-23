@@ -5,7 +5,7 @@ by Mathis DA SILVA
 """
 
 
-from models import BayesianModel
+from models.models import BayesianModel
 import pymc as pm
 import numpy as np
 
