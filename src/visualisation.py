@@ -24,7 +24,7 @@ class Visualisation:
         :return: 
         """
         plt.figure(figsize=self.figure_size)
-        az.plot_comparision(comparison)
+        az.plot_compare(comparison)
         plt.title("Comparison between models")
         plt.show()
 

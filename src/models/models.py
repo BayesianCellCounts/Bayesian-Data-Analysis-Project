@@ -11,10 +11,10 @@ import pymc as pm
 class BayesianModel:
 
 
-    def __init__(self, name: str, model: None, trace: None):
+    def __init__(self, name: str):
         self.name = name
-        self.model = model
-        self.trace = trace
+        self.model = None
+        self.trace = None
 
 
     def build_model(self, datasets: dict):

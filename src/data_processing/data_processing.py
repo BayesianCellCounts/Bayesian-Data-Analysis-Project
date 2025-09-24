@@ -47,7 +47,7 @@ class DataProcessing:
         self.processed_data = {
             'counts': np.array(count_data_long),
             'region_idx': np.array(region_id),
-            'groupe_idx': np.array(group_id),
+            'group_idx': np.array(group_id),
             'n_regions': len(metadata),
             'n_groups': 2,
             'region_names': metadata['abbreviation'].tolist(),

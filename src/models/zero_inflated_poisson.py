@@ -4,7 +4,7 @@ Class implementing the Zero Inflated Poisson model
 by Mathis DA SILVA
 """
 
-from models.models import BayesianModel
+from .models import BayesianModel
 import pymc as pm
 import numpy as np
 
