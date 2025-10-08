@@ -38,5 +38,7 @@ class ZeroInflatedPoissonModel(BayesianModel):
             y_obs = pm.ZeroInflatedPoisson('y_obs', mu=lambda_i, psi=pi,
                                            observed=data['counts'])
 
+            pm.Deterministic('log_likelihood', pm.logp(y_obs, data['counts']))
+
         self.model = model
         return model

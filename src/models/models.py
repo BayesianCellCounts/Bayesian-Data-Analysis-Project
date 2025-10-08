@@ -21,15 +21,17 @@ class BayesianModel:
         raise NotImplementedError
 
 
-    def fit(self, draws = 1000, chains = 4, target_accept = 0.8):
+    def fit(self, draws=500, chains=2, target_accept=0.85, tune=1000):
         if self.model is None:
             raise RuntimeError('model not initialized')
 
         with self.model:
             self.trace = pm.sample(
-                draws = draws,
-                chains = chains,
-                target_accept = target_accept,
-                return_inferencedata = True
+                draws=draws,
+                chains=chains,
+                tune=tune,
+                target_accept=target_accept,
+                return_inferencedata=True,
+                idata_kwargs={'log_likelihood': True}  # Force le calcul de log_likelihood
             )
         return self.trace

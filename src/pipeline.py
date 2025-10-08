@@ -32,20 +32,38 @@ class Pipeline:
             'Zero-Inflated Poisson': ZeroInflatedPoissonModel()
         }
 
-    def fit_models(self, data, draws = 1000, chains = 4):
+    def fit_models(self, data, draws=500, chains=2):
         for name, model in self.models.items():
             print(f"Ajusting {name} model : \n")
             model.build_model(data)
+
+            # Ajustement simple - les paramètres sont gérés dans model.fit()
             self.traces[name] = model.fit(
-                draws = draws,
-                chains = chains,
-                target_accept = 0.9
+                draws=draws,
+                chains=chains,
+                target_accept=0.90,
+                tune=1000  # Plus de tuning pour meilleure convergence
             )
 
     def compare_models(self):
-        comparison = az.compare(self.traces)
-        self.visualizer.plot_model_comparison(self.traces, comparison)
-        return comparison
+        if len(self.traces) < 2:
+            print("Comparaison impossible : moins de 2 modèles ajustés")
+            return None
+
+        try:
+            comparison = az.compare(self.traces)
+            self.visualizer.plot_model_comparison(self.traces, comparison)
+            return comparison
+        except Exception as e:
+            print(f"Erreur lors de la comparaison : {e}")
+            print("Calcul des WAIC individuels à la place...")
+            for name, trace in self.traces.items():
+                try:
+                    waic = az.waic(trace)
+                    print(f"{name}: WAIC = {waic.waic:.1f}")
+                except Exception as e2:
+                    print(f"{name}: Erreur WAIC - {e2}")
+            return None
 
     def analyse_best_model(self, data, comparison):
         best_model_name = comparison.index[0]
@@ -54,7 +72,7 @@ class Pipeline:
         self.visualizer.plot_trace_diagnostics(best_trace, best_model_name)
         self.visualizer.plot_region_effects(best_trace, data, best_model_name)
 
-    def run_pipeline(self, file_path, draws = 1000, chains = 4):
+    def run_pipeline(self, file_path, draws = 500, chains = 2):
         data = self.load_and_process_data(file_path)
 
         self.initialize_models()
@@ -67,4 +85,4 @@ class Pipeline:
 if __name__ == '__main__':
     freeze_support()  # Nécessaire pour Windows
     pipeline = Pipeline()
-    pipeline.run_pipeline('../data/dataset_neuroscience_1.xlsx')
+    pipeline.run_pipeline('../data/dataset_neuroscience_3.xlsx')
